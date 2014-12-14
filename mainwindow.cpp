@@ -14,15 +14,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //connect(ui->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),this,SLOT());
     windowMapper = new QSignalMapper(this);
     connect(windowMapper,SIGNAL(mapped(QWidget*)),this,SLOT(setActiveSubWindow(QWidget*)));
-//    imageLabel = new QLabel;
-//    imageLabel->setBackgroundRole(QPalette::Base);
-//    imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-//    imageLabel->setScaledContents(true);
-
-//    scrollArea = new QScrollArea;
-//    scrollArea->setBackgroundRole(QPalette::Dark);
-//    scrollArea->setWidget(imageLabel);
-//    setCentralWidget(scrollArea);
     resize(QGuiApplication::primaryScreen()->availableSize() * 3 / 5);
     ui->mdiArea->resize(size());
 //    this->loadFile("D:/Users/Ahmed/Pictures/4 x 6 cm 1.jpg");
@@ -72,22 +63,6 @@ bool MainWindow::loadFile(const QString &fileName)
     MdiChild *child = createMdiChild();
     child->show();
     return child->loadFile(fileName);
-
-//    image = ImageManip(fileName);
-
-//    if (image.isNull()) {
-//        QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
-//                                 tr("Cannot load %1.").arg(QDir::toNativeSeparators(fileName)));
-//        setWindowFilePath(QString());
-//        imageLabel->setPixmap(QPixmap());
-//        imageLabel->adjustSize();
-//        return false;
-//    }
-//    scaleFactor = 1.0;
-//    imageLabel->setPixmap(QPixmap::fromImage(image));
-//    imageLabel->adjustSize();
-//    setWindowFilePath(fileName);
-//    return true;
 }
 
 void MainWindow::setActiveSubWindow(QWidget *window)
