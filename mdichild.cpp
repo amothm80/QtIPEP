@@ -3,6 +3,7 @@
 #include <QGuiApplication>
 #include <QDir>
 
+// mdi child windows to display images
 MdiChild::MdiChild()
 {
     setAttribute(Qt::WA_DeleteOnClose);
