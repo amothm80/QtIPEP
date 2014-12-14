@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>702</width>
+    <height>512</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="ImageWidget">
+   <widget class="QMdiArea" name="mdiArea">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1280</width>
+      <height>720</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>702</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuIPEP">
+    <property name="title">
+     <string>IPEP</string>
+    </property>
+    <addaction name="actionOpenImage"/>
+    <addaction name="actionSaveImage"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuImage">
+    <property name="title">
+     <string>Image</string>
+    </property>
+    <addaction name="actionHeight"/>
+    <addaction name="actionWidth"/>
+   </widget>
+   <widget class="QMenu" name="menuEdges">
+    <property name="title">
+     <string>Edges</string>
+    </property>
+    <addaction name="actionHorizontalEdges"/>
+    <addaction name="actionVerticalEdges"/>
+    <addaction name="actionSobel"/>
+    <addaction name="actionLaplacian"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionZoomIn"/>
+    <addaction name="actionZoomOut"/>
+    <addaction name="actionResize"/>
+    <addaction name="actionRotate"/>
+    <addaction name="actionHorizontalFlip"/>
+    <addaction name="actionVerticalFlip"/>
+   </widget>
+   <widget class="QMenu" name="menuAdjust">
+    <property name="title">
+     <string>Adjust</string>
+    </property>
+    <addaction name="actionIncreaseBrightness"/>
+    <addaction name="actionDecreaseBrightness"/>
+    <addaction name="actionGrayScale"/>
+    <addaction name="actionGammaCorrection"/>
+    <addaction name="actionNegative"/>
+    <addaction name="actionRGB"/>
+    <addaction name="actionRGBSwap"/>
+   </widget>
+   <widget class="QMenu" name="menuFilter">
+    <property name="title">
+     <string>Filter</string>
+    </property>
+    <addaction name="actionLowPass"/>
+    <addaction name="actionHighPass"/>
+    <addaction name="actionHeavyBlur"/>
+    <addaction name="actionLightBlur"/>
+   </widget>
+   <addaction name="menuIPEP"/>
+   <addaction name="menuImage"/>
+   <addaction name="menuEdges"/>
+   <addaction name="menuView"/>
+   <addaction name="menuAdjust"/>
+   <addaction name="menuFilter"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpenImage">
+   <property name="text">
+    <string>Open Image</string>
+   </property>
+  </action>
+  <action name="actionSaveImage">
+   <property name="text">
+    <string>Save Image</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionHeight">
+   <property name="text">
+    <string>Height</string>
+   </property>
+  </action>
+  <action name="actionWidth">
+   <property name="text">
+    <string>Width</string>
+   </property>
+  </action>
+  <action name="actionHorizontalEdges">
+   <property name="text">
+    <string>Horizontal Edges</string>
+   </property>
+  </action>
+  <action name="actionVerticalEdges">
+   <property name="text">
+    <string>Vertical Edges</string>
+   </property>
+  </action>
+  <action name="actionSobel">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="actionLaplacian">
+   <property name="text">
+    <string>Laplacian</string>
+   </property>
+  </action>
+  <action name="actionZoomIn">
+   <property name="text">
+    <string>Zoom In</string>
+   </property>
+   <property name="shortcut">
+    <string>+</string>
+   </property>
+  </action>
+  <action name="actionZoomOut">
+   <property name="text">
+    <string>Zoom Out</string>
+   </property>
+   <property name="shortcut">
+    <string>-</string>
+   </property>
+  </action>
+  <action name="actionResize">
+   <property name="text">
+    <string>Resize</string>
+   </property>
+  </action>
+  <action name="actionRotate">
+   <property name="text">
+    <string>Rotate</string>
+   </property>
+  </action>
+  <action name="actionHorizontalFlip">
+   <property name="text">
+    <string>Horizontal Flip </string>
+   </property>
+  </action>
+  <action name="actionVerticalFlip">
+   <property name="text">
+    <string>Vertical Flip</string>
+   </property>
+  </action>
+  <action name="actionIncreaseBrightness">
+   <property name="text">
+    <string>Increase Brightness</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionGrayScale">
+   <property name="text">
+    <string>GrayScale</string>
+   </property>
+  </action>
+  <action name="actionGammaCorrection">
+   <property name="text">
+    <string>Gamma Correction</string>
+   </property>
+  </action>
+  <action name="actionNegative">
+   <property name="text">
+    <string>Negative</string>
+   </property>
+  </action>
+  <action name="actionLowPass">
+   <property name="text">
+    <string>LowPass</string>
+   </property>
+  </action>
+  <action name="actionHighPass">
+   <property name="text">
+    <string>High Pass</string>
+   </property>
+  </action>
+  <action name="actionHeavyBlur">
+   <property name="text">
+    <string>Heavy Blur</string>
+   </property>
+  </action>
+  <action name="actionLightBlur">
+   <property name="text">
+    <string>Light Blur</string>
+   </property>
+  </action>
+  <action name="actionRGB">
+   <property name="text">
+    <string>RGB</string>
+   </property>
+  </action>
+  <action name="actionRGBSwap">
+   <property name="text">
+    <string>RGBSwap</string>
+   </property>
+  </action>
+  <action name="actionDecreaseBrightness">
+   <property name="text">
+    <string>Decrease Brightness</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>253</x>
+     <y>223</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
