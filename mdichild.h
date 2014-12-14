@@ -66,6 +66,7 @@ public:
     void zoomIn();
     void negative();
     void zoomOut();
+    void grayScale();
 //private slots:
 
 

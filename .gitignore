@@ -13,3 +13,5 @@ build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/Makefile.Release
 build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/ui_mainwindow.h
 QtIPEP.pro.user
 QtIPEP.pro.user.3.3-pre1
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/debug/qrc_resources.cpp
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/debug/qrc_resources.o

@@ -88,6 +88,21 @@ QImage ImageManip::decreaseBrightness(const int brgtval){
     return res;
 }
 
+QImage ImageManip::convertGrayScale(){
+    QImage res = QImage(QImage::size(),QImage::format());
+    for (int i = 1; i < QImage::size().height()-1; i++) {
+        QRgb *q = (QRgb*) res.scanLine(i);
+        QRgb *p = ( QRgb*)QImage::constScanLine(i);
+        QRgb *end = p +  QImage::size().width()-1;
+        while (p < end) {
+            *q = qRgba((qRed(*p)+qGreen(*p)+qBlue(*p))/3,(qRed(*p)+qGreen(*p)+qBlue(*p))/3,(qRed(*p)+qGreen(*p)+qBlue(*p))/3,255);
+            p++;
+            q++;
+        }
+    }
+    return res;
+}
+
 QImage ImageManip::horizontalEdgeDetection(){
     QImage res = QImage(QImage::size(),QImage::format());
     for (int i = 1; i < QImage::size().height()-1; i++) {

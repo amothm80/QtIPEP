@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(windowMapper,SIGNAL(mapped(QWidget*)),this,SLOT(setActiveSubWindow(QWidget*)));
     resize(QGuiApplication::primaryScreen()->availableSize() * 3 / 5);
     ui->mdiArea->resize(size());
+    setWindowTitle("QtIPEP");
+    setWindowIcon(QIcon(":/icons/image.ico"));
 //    this->loadFile("D:/Users/Ahmed/Pictures/4 x 6 cm 1.jpg");
 
 }
@@ -118,6 +120,10 @@ void MainWindow::on_actionNegative_triggered(){
 
 void MainWindow::on_actionZoomOut_triggered(){
     activeMdiChild()->zoomOut();
+}
+
+void MainWindow::on_actionGrayScale_triggered(){
+    activeMdiChild()->grayScale();
 }
 
 MainWindow::~MainWindow()

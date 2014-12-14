@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QGuiApplication>
 #include <QDir>
+#include <QIcon>
 
 // mdi child windows to display images
 MdiChild::MdiChild()
@@ -48,6 +49,8 @@ bool MdiChild::loadFile(const QString &fileName){
     parentWidget()->setMaximumSize(size().width()+18,size().height()+40);
     parentWidget()->resize(size().width()+18,size().height()+40);
     setWindowFilePath(fileName);
+    setWindowTitle(fileName);
+    setWindowIcon(QIcon(":/icons/image.ico"));
     return true;
 }
 
@@ -90,6 +93,11 @@ void MdiChild::heavyBlur(){
 
 void MdiChild::laplacian(){
     image = image.laplacianTransformation();
+    imageLabel->setPixmap(QPixmap::fromImage(image));
+}
+
+void MdiChild::grayScale(){
+    image = image.convertGrayScale();
     imageLabel->setPixmap(QPixmap::fromImage(image));
 }
 

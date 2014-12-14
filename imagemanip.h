@@ -50,6 +50,7 @@ public:
     QImage laplacianTransformation();
     QImage heavyBlur();
     QImage sobelTransformation();
+    QImage convertGrayScale();
     void operator = (const QImage& base_);
 
 
