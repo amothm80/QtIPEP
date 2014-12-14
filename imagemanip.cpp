@@ -163,7 +163,7 @@ QImage ImageManip::heavyBlur(){
 }
 
 
-// regarding the commented lines, it seems that casting the scanlines into a QRgs
+// regarding the commented lines, it seems that casting the scanlines into a QRgb
 // then manuplating the colors is faster than creating a QColor class for each pixel
 QImage ImageManip::verticalEdgeDetection(){
     QImage res = QImage(QImage::size(),QImage::format());

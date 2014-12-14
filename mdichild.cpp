@@ -36,11 +36,14 @@ bool MdiChild::loadFile(const QString &fileName){
     scaleFactor = 1.0;
 
     imageLabel->setPixmap(QPixmap::fromImage(image));
-    imageLabel->resize(image.size());
+
+
     if (image.width() > mdiAreaSize.width() ||
             image.height() > mdiAreaSize.height()){
-        imageLabel->resize(mdiAreaSize * 4/5);
+        image = image.scaled(mdiAreaSize.width() * 4/5,mdiAreaSize.height()*4/5, Qt::KeepAspectRatio);
+        //imageLabel->resize(mdiAreaSize * 4/5);
     }
+    imageLabel->resize(image.size());
     resize(imageLabel->size());
     parentWidget()->setMaximumSize(size().width()+18,size().height()+40);
     parentWidget()->resize(size().width()+18,size().height()+40);
