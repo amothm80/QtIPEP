@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+
 #include <QtWidgets>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mdiArea->resize(size());
     setWindowTitle("QtIPEP");
     setWindowIcon(QIcon(":/icons/image.ico"));
+
+
 //    this->loadFile("D:/Users/Ahmed/Pictures/4 x 6 cm 1.jpg");
 
 }
@@ -93,7 +95,9 @@ void MainWindow::on_actionDecreaseBrightness_triggered(){
 }
 
 void MainWindow::on_actionRGB_triggered(){
-    activeMdiChild()->modifyRGB();
+    RGBDialog d;
+    d.exec();
+    //activeMdiChild()->modifyRGB();
 }
 
 void MainWindow::on_actionHorizontalEdges_triggered(){

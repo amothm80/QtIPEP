@@ -8,6 +8,10 @@
 #include <QSignalMapper>
 #include "imagemanip.h"
 #include "mdichild.h"
+#include "ui_mainwindow.h"
+#include "brightnessdialog.h"
+#include "rgbdialog.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -50,13 +54,7 @@ private:
     QMdiSubWindow *findMdiChild(const QString &fileName);
     QSignalMapper *windowMapper;
     void resizeEvent( QResizeEvent *e );
-
-//    double currentScaleFactor = 1.0;
     Ui::MainWindow *ui;
-//    ImageManip image;
-//    QLabel *imageLabel;
-//    QScrollArea *scrollArea;
-//    double scaleFactor;
 };
 
 #endif // MAINWINDOW_H

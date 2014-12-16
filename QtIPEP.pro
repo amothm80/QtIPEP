@@ -15,14 +15,20 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     imagemanip.cpp \
-    mdichild.cpp
+    mdichild.cpp \
+    rgbdialog.cpp \
+    brightnessdialog.cpp
 
 
 HEADERS  += mainwindow.h \
     imagemanip.h \
-    mdichild.h
+    mdichild.h \
+    rgbdialog.h \
+    brightnessdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    rgbdialog.ui \
+    brightnessdialog.ui
 
 QMAKE_CXXFLAGS += -std=c++11 -static-libstdc++
 

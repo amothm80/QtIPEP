@@ -15,3 +15,11 @@ QtIPEP.pro.user
 QtIPEP.pro.user.3.3-pre1
 build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/debug/qrc_resources.cpp
 build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/debug/qrc_resources.o
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/debug/brightnessdialog.o
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/debug/moc_brightnessdialog.cpp
+*.o
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/debug/moc_rgbdialog.cpp
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/object_script.QtIPEP.Debug
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/object_script.QtIPEP.Release
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/ui_brightnessdialog.h
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/ui_rgbdialog.h
