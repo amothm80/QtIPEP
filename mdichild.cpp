@@ -72,6 +72,12 @@ void MdiChild::decreaseBrightness(){
     image = image.decreaseBrightness(1);
     imageLabel->setPixmap(QPixmap::fromImage(image));
 }
+
+void MdiChild::modifyRGB(){
+    image = image.modifyRGB(30,30,30);
+    imageLabel->setPixmap(QPixmap::fromImage(image));
+}
+
 void MdiChild::horizontalEdges(){
     image = image.horizontalEdgeDetection();
     imageLabel->setPixmap(QPixmap::fromImage(image));

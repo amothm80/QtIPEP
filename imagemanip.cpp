@@ -41,8 +41,7 @@ QImage ImageManip::negative(){
 }
 
 QImage ImageManip::increaseBrightness(const int brgtval){
-    uint v = (uint) brgtval;
-    v = 0x00010101;
+    uint v = ((((((0xff << 8 ) | ( brgtval & 0xff )) << 8) | ( brgtval & 0xff )) << 8) | ( brgtval & 0xff ));
     QImage res = QImage(QImage::size(),QImage::format());
     for (int i = 0; i < QImage::size().height(); i++) {
         uint *q = (uint*)res.scanLine(i);
@@ -65,8 +64,7 @@ QImage ImageManip::increaseBrightness(const int brgtval){
 }
 
 QImage ImageManip::decreaseBrightness(const int brgtval){
-    uint v = (uint) brgtval;
-    v = 0x00010101;
+    uint v = ((((((0xff << 8 ) | ( brgtval & 0xff )) << 8) | ( brgtval & 0xff )) << 8) | ( brgtval & 0xff ));
     QImage res = QImage(QImage::size(),QImage::format());
     for (int i = 0; i < QImage::size().height(); i++) {
         uint *q = (uint*)res.scanLine(i);
@@ -78,6 +76,29 @@ QImage ImageManip::decreaseBrightness(const int brgtval){
                 ((( (c >> 8) & 0xff ) - ((v >> 8) & 0xff)) > 0x00) &&
                     ((( (c >> 16) & 0xff ) - ((v>>16) & 0xff)) > 0x00)) {
                 *q = c - v;
+            }else{
+                *q = c;
+            }
+            p++;
+            q++;
+        }
+    }
+    return res;
+}
+
+QImage ImageManip::modifyRGB(const int r, const int g, const int b){
+    uint v = ((((((0xff << 8 ) | ( r & 0xff )) << 8) | ( g & 0xff )) << 8) | ( b & 0xff ));
+    QImage res = QImage(QImage::size(),QImage::format());
+    for (int i = 0; i < QImage::size().height(); i++) {
+        uint *q = (uint*)res.scanLine(i);
+        const uint *p = (const uint*)QImage::constScanLine(i);
+        const uint *end = p +  QImage::size().width();
+        while (p < end) {
+            uint c = *p;
+            if (((( c & 0xff ) + (v & 0xff)) <= 0xff) &&
+                ((( (c >> 8) & 0xff ) + ((v >> 8) & 0xff)) <= 0xff) &&
+                    ((( (c >> 16) & 0xff ) + ((v>>16) & 0xff)) <= 0xff)) {
+                *q = c + v;
             }else{
                 *q = c;
             }
@@ -195,15 +216,35 @@ QImage ImageManip::verticalEdgeDetection(){
         QRgb *end = p +  QImage::size().width()-1;
         while (p < end) {
 
-//            QColor c11 = QColor(*(pm1 - 1));
-//            QColor c12 = QColor(*pm1);
-//            QColor c13 = QColor(*(pm1 + 1));
-//            QColor c21 = QColor(*(p - 1));
-//            QColor c22 = QColor(*p);
-//            QColor c23 = QColor(*(p + 1));
-//            QColor c31 = QColor(*(pp1 - 1));
-//            QColor c32 = QColor(*pp1);
-//            QColor c33 = QColor(*(pp1 + 1));
+/*
+            QColor c11 = QColor(*(pm1 - 1));
+            QColor c12 = QColor(*pm1);
+            QColor c13 = QColor(*(pm1 + 1));
+            QColor c21 = QColor(*(p - 1));
+            QColor c22 = QColor(*p);
+            QColor c23 = QColor(*(p + 1));
+            QColor c31 = QColor(*(pp1 - 1));
+            QColor c32 = QColor(*pp1);
+            QColor c33 = QColor(*(pp1 + 1));
+
+            int red = c11.red()*vegmsk[0][0] + c12.red()*vegmsk[0][1] + c13.red()*vegmsk[0][2] +
+                      c21.red()*vegmsk[1][0] + c22.red()*vegmsk[1][1] + c23.red()*vegmsk[1][2] +
+                      c31.red()*vegmsk[2][0] + c32.red()*vegmsk[2][1] + c33.red()*vegmsk[2][2];
+            if (red>255) red=255;
+            if (red<0) red=0;
+
+            int green = c11.green()*vegmsk[0][0] + c12.green()*vegmsk[0][1] + c13.green()*vegmsk[0][2] +
+                        c21.green()*vegmsk[1][0] + c22.green()*vegmsk[1][1] + c23.green()*vegmsk[1][2] +
+                        c31.green()*vegmsk[2][0] + c32.green()*vegmsk[2][1] + c33.green()*vegmsk[2][2];
+            if (green>255) green=255;
+            if (green<0) green=0;
+
+            int blue = c11.blue()*vegmsk[0][0] + c12.blue()*vegmsk[0][1] + c13.blue()*vegmsk[0][2] +
+                       c21.blue()*vegmsk[1][0] + c22.blue()*vegmsk[1][1] + c23.blue()*vegmsk[1][2] +
+                       c31.blue()*vegmsk[2][0] + c32.blue()*vegmsk[2][1] + c33.blue()*vegmsk[2][2];
+            if (blue>255) blue=255;
+            if (blue<0) blue=0;
+*/
 
             int red = qRed(*(pm1-1))*vegmsk[0][0] + qRed(*(pm1))*vegmsk[0][1] + qRed(*(pm1+1))*vegmsk[0][2] +
                       qRed(*(p-1))*vegmsk[1][0] + qRed(*(p))*vegmsk[1][1] + qRed(*(p+1))*vegmsk[1][2] +
@@ -223,23 +264,7 @@ QImage ImageManip::verticalEdgeDetection(){
             if (blue>255) blue=255;
             if (blue<0) blue=0;
 
-//            int red = c11.red()*vegmsk[0][0] + c12.red()*vegmsk[0][1] + c13.red()*vegmsk[0][2] +
-//                      c21.red()*vegmsk[1][0] + c22.red()*vegmsk[1][1] + c23.red()*vegmsk[1][2] +
-//                      c31.red()*vegmsk[2][0] + c32.red()*vegmsk[2][1] + c33.red()*vegmsk[2][2];
-//            if (red>255) red=255;
-//            if (red<0) red=0;
 
-//            int green = c11.green()*vegmsk[0][0] + c12.green()*vegmsk[0][1] + c13.green()*vegmsk[0][2] +
-//                        c21.green()*vegmsk[1][0] + c22.green()*vegmsk[1][1] + c23.green()*vegmsk[1][2] +
-//                        c31.green()*vegmsk[2][0] + c32.green()*vegmsk[2][1] + c33.green()*vegmsk[2][2];
-//            if (green>255) green=255;
-//            if (green<0) green=0;
-
-//            int blue = c11.blue()*vegmsk[0][0] + c12.blue()*vegmsk[0][1] + c13.blue()*vegmsk[0][2] +
-//                       c21.blue()*vegmsk[1][0] + c22.blue()*vegmsk[1][1] + c23.blue()*vegmsk[1][2] +
-//                       c31.blue()*vegmsk[2][0] + c32.blue()*vegmsk[2][1] + c33.blue()*vegmsk[2][2];
-//            if (blue>255) blue=255;
-//            if (blue<0) blue=0;
             *q = qRgba(red,green,blue,255);
             pm1++;
             p++;
@@ -268,57 +293,27 @@ QImage ImageManip::laplacianTransformation(){
         QRgb *pp2 = (QRgb *)QImage::constScanLine(i+2);
         QRgb *end = p +  QImage::size().width()-2;
         while (p < end) {
-            qRed(*(pm2 - 2));
-            qRed(*(pm2 - 1));
-            qRed(*(pm2));
-            qRed(*(pm2 + 1));
-            qRed(*(pm2 + 2));
-
-            qRed(*(pm1 - 2));
-            qRed(*(pm1 - 1));
-            qRed(*(pm1));
-            qRed(*(pm1 + 1));
-            qRed(*(pm1 + 2));
-
-            qRed(*(p - 2));
-            qRed(*(p - 1));
-            qRed(*(p));
-            qRed(*(p + 1));
-            qRed(*(p + 2));
-
-            qRed(*(pp1 - 2));
-            qRed(*(pp1 - 1));
-            qRed(*(pp1));
-            qRed(*(pp1 + 1));
-            qRed(*(pp1 + 2));
-
-            qRed(*(pp2 - 2));
-            qRed(*(pp2 - 1));
-            qRed(*(pp2));
-            qRed(*(pp2 + 1));
-            qRed(*(pp2 + 2));
-
-            int red =  qRed(*(pm2 - 2))*lapmsk[0][0] +  qRed(*(pm2 - 1))*lapmsk[0][1] + qRed(*(pm2))*lapmsk[0][2] + qRed(*(pm2 + 1))*lapmsk[0][3] + qRed(*(pm2 + 2))*lapmsk[0][4] +
+            int red =  qRed(*(pm2 - 2))*lapmsk[0][0] + qRed(*(pm2 - 1))*lapmsk[0][1] + qRed(*(pm2))*lapmsk[0][2] + qRed(*(pm2 + 1))*lapmsk[0][3] + qRed(*(pm2 + 2))*lapmsk[0][4] +
                        qRed(*(pm1 - 2))*lapmsk[1][0] + qRed(*(pm1 - 1))*lapmsk[1][1] + qRed(*(pm1))*lapmsk[1][2] + qRed(*(pm1 + 1))*lapmsk[1][3] + qRed(*(pm1 + 2))*lapmsk[1][4] +
-                       qRed(*(p - 2))*lapmsk[2][0] + qRed(*(p - 1))*lapmsk[2][1] + qRed(*(p))*lapmsk[2][2] + qRed(*(p + 1))*lapmsk[2][3] + qRed(*(p + 2))*lapmsk[2][4] +
-                       qRed(*(pp1 - 2))*lapmsk[3][0] + qRed(*(pp1 - 1))*lapmsk[3][1] + qRed(*(pp1))*lapmsk[3][2] + qRed(*(pp1 + 1))*lapmsk[3][3] +qRed(*(pp1 + 2))*lapmsk[3][4] +
+                       qRed(*(  p - 2))*lapmsk[2][0] + qRed(*(  p - 1))*lapmsk[2][1] + qRed(*(  p))*lapmsk[2][2] + qRed(*(  p + 1))*lapmsk[2][3] + qRed(*(  p + 2))*lapmsk[2][4] +
+                       qRed(*(pp1 - 2))*lapmsk[3][0] + qRed(*(pp1 - 1))*lapmsk[3][1] + qRed(*(pp1))*lapmsk[3][2] + qRed(*(pp1 + 1))*lapmsk[3][3] + qRed(*(pp1 + 2))*lapmsk[3][4] +
                        qRed(*(pp2 - 2))*lapmsk[4][0] + qRed(*(pp2 - 1))*lapmsk[4][1] + qRed(*(pp2))*lapmsk[4][2] + qRed(*(pp2 + 1))*lapmsk[4][3] + qRed(*(pp2 + 2))*lapmsk[4][4];
             if (red>255) red=255;
             if (red<0) red=0;
 
-            int green =  qGreen(*(pm2 - 2))*lapmsk[0][0] +  qGreen(*(pm2 - 1))*lapmsk[0][1] + qGreen(*(pm2))*lapmsk[0][2] + qGreen(*(pm2 + 1))*lapmsk[0][3] + qGreen(*(pm2 + 2))*lapmsk[0][4] +
-                       qGreen(*(pm1 - 2))*lapmsk[1][0] + qGreen(*(pm1 - 1))*lapmsk[1][1] + qGreen(*(pm1))*lapmsk[1][2] + qGreen(*(pm1 + 1))*lapmsk[1][3] + qGreen(*(pm1 + 2))*lapmsk[1][4] +
-                       qGreen(*(p - 2))*lapmsk[2][0] + qGreen(*(p - 1))*lapmsk[2][1] + qGreen(*(p))*lapmsk[2][2] + qGreen(*(p + 1))*lapmsk[2][3] + qGreen(*(p + 2))*lapmsk[2][4] +
-                       qGreen(*(pp1 - 2))*lapmsk[3][0] + qGreen(*(pp1 - 1))*lapmsk[3][1] + qGreen(*(pp1))*lapmsk[3][2] + qGreen(*(pp1 + 1))*lapmsk[3][3] +qGreen(*(pp1 + 2))*lapmsk[3][4] +
-                       qGreen(*(pp2 - 2))*lapmsk[4][0] + qGreen(*(pp2 - 1))*lapmsk[4][1] + qGreen(*(pp2))*lapmsk[4][2] + qGreen(*(pp2 + 1))*lapmsk[4][3] + qGreen(*(pp2 + 2))*lapmsk[4][4];
+            int green =  qGreen(*(pm2 - 2))*lapmsk[0][0] + qGreen(*(pm2 - 1))*lapmsk[0][1] + qGreen(*(pm2))*lapmsk[0][2] + qGreen(*(pm2 + 1))*lapmsk[0][3] + qGreen(*(pm2 + 2))*lapmsk[0][4] +
+                         qGreen(*(pm1 - 2))*lapmsk[1][0] + qGreen(*(pm1 - 1))*lapmsk[1][1] + qGreen(*(pm1))*lapmsk[1][2] + qGreen(*(pm1 + 1))*lapmsk[1][3] + qGreen(*(pm1 + 2))*lapmsk[1][4] +
+                         qGreen(*(  p - 2))*lapmsk[2][0] + qGreen(*(  p - 1))*lapmsk[2][1] + qGreen(*(  p))*lapmsk[2][2] + qGreen(*(  p + 1))*lapmsk[2][3] + qGreen(*(  p + 2))*lapmsk[2][4] +
+                         qGreen(*(pp1 - 2))*lapmsk[3][0] + qGreen(*(pp1 - 1))*lapmsk[3][1] + qGreen(*(pp1))*lapmsk[3][2] + qGreen(*(pp1 + 1))*lapmsk[3][3] + qGreen(*(pp1 + 2))*lapmsk[3][4] +
+                         qGreen(*(pp2 - 2))*lapmsk[4][0] + qGreen(*(pp2 - 1))*lapmsk[4][1] + qGreen(*(pp2))*lapmsk[4][2] + qGreen(*(pp2 + 1))*lapmsk[4][3] + qGreen(*(pp2 + 2))*lapmsk[4][4];
             if (green>255) green=255;
             if (green<0) green=0;
 
-            int blue =  qBlue(*(pm2 - 2))*lapmsk[0][0] +  qBlue(*(pm2 - 1))*lapmsk[0][1] + qBlue(*(pm2))*lapmsk[0][2] + qBlue(*(pm2 + 1))*lapmsk[0][3] + qBlue(*(pm2 + 2))*lapmsk[0][4] +
-                       qBlue(*(pm1 - 2))*lapmsk[1][0] + qBlue(*(pm1 - 1))*lapmsk[1][1] + qBlue(*(pm1))*lapmsk[1][2] + qBlue(*(pm1 + 1))*lapmsk[1][3] + qBlue(*(pm1 + 2))*lapmsk[1][4] +
-                       qBlue(*(p - 2))*lapmsk[2][0] + qBlue(*(p - 1))*lapmsk[2][1] + qBlue(*(p))*lapmsk[2][2] + qBlue(*(p + 1))*lapmsk[2][3] + qBlue(*(p + 2))*lapmsk[2][4] +
-                       qBlue(*(pp1 - 2))*lapmsk[3][0] + qBlue(*(pp1 - 1))*lapmsk[3][1] + qBlue(*(pp1))*lapmsk[3][2] + qBlue(*(pp1 + 1))*lapmsk[3][3] +qBlue(*(pp1 + 2))*lapmsk[3][4] +
-                       qBlue(*(pp2 - 2))*lapmsk[4][0] + qBlue(*(pp2 - 1))*lapmsk[4][1] + qBlue(*(pp2))*lapmsk[4][2] + qBlue(*(pp2 + 1))*lapmsk[4][3] + qBlue(*(pp2 + 2))*lapmsk[4][4];
+            int blue =  qBlue(*(pm2 - 2))*lapmsk[0][0] + qBlue(*(pm2 - 1))*lapmsk[0][1] + qBlue(*(pm2))*lapmsk[0][2] + qBlue(*(pm2 + 1))*lapmsk[0][3] + qBlue(*(pm2 + 2))*lapmsk[0][4] +
+                        qBlue(*(pm1 - 2))*lapmsk[1][0] + qBlue(*(pm1 - 1))*lapmsk[1][1] + qBlue(*(pm1))*lapmsk[1][2] + qBlue(*(pm1 + 1))*lapmsk[1][3] + qBlue(*(pm1 + 2))*lapmsk[1][4] +
+                        qBlue(*(  p - 2))*lapmsk[2][0] + qBlue(*(  p - 1))*lapmsk[2][1] + qBlue(*(  p))*lapmsk[2][2] + qBlue(*(  p + 1))*lapmsk[2][3] + qBlue(*(  p + 2))*lapmsk[2][4] +
+                        qBlue(*(pp1 - 2))*lapmsk[3][0] + qBlue(*(pp1 - 1))*lapmsk[3][1] + qBlue(*(pp1))*lapmsk[3][2] + qBlue(*(pp1 + 1))*lapmsk[3][3] + qBlue(*(pp1 + 2))*lapmsk[3][4] +
+                        qBlue(*(pp2 - 2))*lapmsk[4][0] + qBlue(*(pp2 - 1))*lapmsk[4][1] + qBlue(*(pp2))*lapmsk[4][2] + qBlue(*(pp2 + 1))*lapmsk[4][3] + qBlue(*(pp2 + 2))*lapmsk[4][4];
             if (blue>255) blue=255;
             if (blue<0) blue=0;
             *q = qRgba(red,green,blue,255);

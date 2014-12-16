@@ -43,6 +43,7 @@ private slots:
     void on_actionLaplacian_triggered();
     void on_actionHeavyBlur_triggered();
     void on_actionGrayScale_triggered();
+    void on_actionRGB_triggered();
 
 private:
     MdiChild *activeMdiChild();

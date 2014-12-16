@@ -51,6 +51,7 @@ public:
     QImage heavyBlur();
     QImage sobelTransformation();
     QImage convertGrayScale();
+    QImage modifyRGB(const int r, const int g, const int b);
     void operator = (const QImage& base_);
 
 

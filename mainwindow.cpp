@@ -91,6 +91,11 @@ void MainWindow::on_actionIncreaseBrightness_triggered(){
 void MainWindow::on_actionDecreaseBrightness_triggered(){
     activeMdiChild()->decreaseBrightness();
 }
+
+void MainWindow::on_actionRGB_triggered(){
+    activeMdiChild()->modifyRGB();
+}
+
 void MainWindow::on_actionHorizontalEdges_triggered(){
     activeMdiChild()->horizontalEdges();
 }
