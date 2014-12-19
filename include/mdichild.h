@@ -83,6 +83,10 @@ public:
     void zoomOut();
     void grayScale();
     void modifyRGB(const int r, const int g, const int b);
+    void horizontalFlip();
+    void verticalFlip();
+    void rotateClockwise();
+    void rotateAntiClockwise();
 //private slots:
 
 

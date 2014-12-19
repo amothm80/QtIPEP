@@ -114,6 +114,16 @@ void MdiChild::RGBSwap(){
     imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
+void MdiChild::horizontalFlip(){
+    addImage(images->image.mirrored(true,false));
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+}
+
+void MdiChild::verticalFlip(){
+    addImage(images->image.mirrored(false,true));
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+}
+
 void MdiChild::increaseBrightness(int v){
     addImage(images->image.increaseBrightness(v));
     imageLabel->setPixmap(QPixmap::fromImage(images->image));

@@ -370,6 +370,13 @@ QImage ImageManip::heavyBlur(){
     return res;
 }
 
+QImage ImageManip::rotateClockwise(){
+    QImage res = QImage(QImage::height(), QImage::width(),QImage::format());
+}
+
+QImage ImageManip::rotateAntiClockwise(){
+    QImage res = QImage(QImage::height(), QImage::width(),QImage::format());
+}
 
 void ImageManip::operator = (const QImage& base_)
 {

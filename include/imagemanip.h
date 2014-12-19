@@ -52,6 +52,8 @@ public:
     QImage sobelTransformation();
     QImage convertGrayScale();
     QImage modifyRGB(const int r, const int g, const int b);
+    QImage rotateClockwise();
+    QImage rotateAntiClockwise();
     void operator = (const QImage& base_);
 
 
