@@ -6,6 +6,14 @@ RGBDialog::RGBDialog(QWidget *parent) :
     ui(new Ui::RGBDialog)
 {
     ui->setupUi(this);
+
+}
+
+void RGBDialog::accept(){
+    emit RGBValues(ui->horizontalSliderRed->value(),
+                 ui->horizontalSliderGreen->value(),
+                 ui->horizontalSliderBlue->value());
+    QDialog::accept();
 }
 
 RGBDialog::~RGBDialog()

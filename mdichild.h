@@ -46,6 +46,18 @@
 #include <QScrollArea>
 #include "imagemanip.h"
 
+//#ifndef NULL
+//#define NULL 0
+//#define NULL nullptr
+//#endif
+
+struct imageNode
+{
+    ImageManip image;
+    imageNode *next;
+    imageNode *prev;
+};
+
 class MdiChild : public QScrollArea
 {
     Q_OBJECT
@@ -55,9 +67,11 @@ public:
     ~MdiChild();
 
     bool loadFile(const QString &);
+    void undoAction();
+    void redoAction();
     void RGBSwap();
-    void increaseBrightness();
-    void decreaseBrightness();
+    void increaseBrightness(int v);
+    void decreaseBrightness(int v);
     void horizontalEdges();
     void verticalEdges();
     void sobel();
@@ -67,13 +81,20 @@ public:
     void negative();
     void zoomOut();
     void grayScale();
-    void modifyRGB();
+    void modifyRGB(const int r, const int g, const int b);
 //private slots:
 
 
 private:
+
+    void addImage(ImageManip img);
+    void addImage(QImage img);
+    void createImagesList(ImageManip img);
+
+
     double currentScaleFactor = 1.0;
-    ImageManip image;
+    //ImageManip image;
+    imageNode *images;
     QLabel *imageLabel;
     double scaleFactor;
 };

@@ -31,8 +31,7 @@ protected:
 
 private slots:
     MdiChild *createMdiChild();
-    void setActiveSubWindow(QWidget *window);
-
+    void setActiveSubWindow(QWidget *window);   
     bool loadFile(const QString &);
     void on_actionOpenImage_triggered();
     void on_actionRGBSwap_triggered();
@@ -41,6 +40,7 @@ private slots:
     void on_actionNegative_triggered();
     void on_actionIncreaseBrightness_triggered();
     void on_actionDecreaseBrightness_triggered();
+    void on_actionBrightness_triggered();
     void on_actionHorizontalEdges_triggered();
     void on_actionVerticalEdges_triggered();
     void on_actionSobel_triggered();
@@ -48,6 +48,13 @@ private slots:
     void on_actionHeavyBlur_triggered();
     void on_actionGrayScale_triggered();
     void on_actionRGB_triggered();
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
+    // on_XXX slots are only used for auto-connect and cannot be used
+    // in normal connect fucntions
+    //void on_actionRGB_accepted(int r,int g,int b);
+    void actionRGB_accepted(int r,int g,int b);
+    void actionBrightness_accepted(int v);
 
 private:
     MdiChild *activeMdiChild();

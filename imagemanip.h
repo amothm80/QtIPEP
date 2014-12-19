@@ -6,15 +6,15 @@
 #include <QDebug>
 
 
-//matrix mask for detecting horizontal edges
+//matrix mask for heavy blur
 const int hblurmsk[3][3] = {{1, 1, 1},
                             { 1,  1,  1},
                             { 1,  1,  1}};
 
 //matrix mask for detecting horizontal edges
-const int hegmsk[3][3] = {  {-1, -2, -1},
+const int hegmsk[3][3] = {  { 1,  2,  1},
                             { 0,  0,  0},
-                            { 1,  2,  1}};
+                            {-1, -2, -1}};
 
 //matrix mask for detecting vertical edges
 const int vegmsk[3][3] = {   {-1,  0,  1},

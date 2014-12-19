@@ -87,6 +87,9 @@ QImage ImageManip::decreaseBrightness(const int brgtval){
 }
 
 QImage ImageManip::modifyRGB(const int r, const int g, const int b){
+    QRgb ar = qRgb(abs(r),     0,     0);
+    QRgb ag = qRgb(     0,abs(g),     0);
+    QRgb ab = qRgb(     0,     0,abs(b));
     uint v = ((((((0xff << 8 ) | ( r & 0xff )) << 8) | ( g & 0xff )) << 8) | ( b & 0xff ));
     QImage res = QImage(QImage::size(),QImage::format());
     for (int i = 0; i < QImage::size().height(); i++) {
@@ -131,6 +134,10 @@ QImage ImageManip::horizontalEdgeDetection(){
         QRgb *pm1 = ( QRgb*)QImage::constScanLine(i-1);
         QRgb *p = ( QRgb*)QImage::constScanLine(i);
         QRgb *pp1 = ( QRgb*)QImage::constScanLine(i+1);
+        pm1++;
+        p++;
+        pp1++;
+        q++;
         QRgb *end = p +  QImage::size().width()-1;
         while (p < end) {
 
@@ -161,44 +168,6 @@ QImage ImageManip::horizontalEdgeDetection(){
     return res;
 }
 
-QImage ImageManip::heavyBlur(){
-    QImage res = QImage(QImage::size(),QImage::format());
-    for (int i = 1; i < QImage::size().height()-1; i++) {
-        QRgb *q = (QRgb*) res.scanLine(i);
-        QRgb *pm1 = ( QRgb*)QImage::constScanLine(i-1);
-        QRgb *p = ( QRgb*)QImage::constScanLine(i);
-        QRgb *pp1 = ( QRgb*)QImage::constScanLine(i+1);
-        QRgb *end = p +  QImage::size().width()-1;
-        while (p < end) {
-
-            int red = (qRed(*(pm1-1))*hblurmsk[0][0] + qRed(*(pm1))*hblurmsk[0][1] + qRed(*(pm1+1))*hblurmsk[0][2] +
-                      qRed(*(p-1))*hblurmsk[1][0] + qRed(*(p))*hblurmsk[1][1] + qRed(*(p+1))*hblurmsk[1][2] +
-                      qRed(*(pp1)-1)*hblurmsk[2][0] + qRed(*(pp1))*hblurmsk[2][1] + qRed(*(pp1+1))*hblurmsk[2][2])/9;
-            if (red>255) red=255;
-            if (red<0) red=0;
-
-            int green = (qGreen(*(pm1-1))*hblurmsk[0][0] + qGreen(*(pm1))*hblurmsk[0][1] + qGreen(*(pm1+1))*hblurmsk[0][2] +
-                      qGreen(*(p-1))*hblurmsk[1][0] + qGreen(*p)*hblurmsk[1][1] + qGreen(*(p+1))*hblurmsk[1][2] +
-                      qGreen(*(pp1-1))*hblurmsk[2][0] + qGreen(*pp1)*hblurmsk[2][1] + qGreen(*(pp1+1))*hblurmsk[2][2])/9;
-            if (green>255) green=255;
-            if (green<0) green=0;
-
-            int blue = (qBlue(*(pm1-1))*hblurmsk[0][0] + qBlue(*pm1)*hblurmsk[0][1] + qBlue(*(pm1+1))*hblurmsk[0][2] +
-                      qBlue(*(p-1))*hblurmsk[1][0] + qBlue(*p)*hblurmsk[1][1] + qBlue(*(p+1))*hblurmsk[1][2] +
-                      qBlue(*(pp1-1))*hblurmsk[2][0] + qBlue(*pp1)*hblurmsk[2][1] + qBlue(*(pp1+1))*hblurmsk[2][2])/9;
-            if (blue>255) blue=255;
-            if (blue<0) blue=0;
-            *q = qRgba(red,green,blue,255);
-            pm1++;
-            p++;
-            pp1++;
-            q++;
-        }
-    }
-    return res;
-}
-
-
 // regarding the commented lines, it seems that casting the scanlines into a QRgb
 // then manuplating the colors is faster than creating a QColor class for each pixel
 QImage ImageManip::verticalEdgeDetection(){
@@ -213,6 +182,10 @@ QImage ImageManip::verticalEdgeDetection(){
         QRgb *pm1 = ( QRgb*)QImage::constScanLine(i-1);
         QRgb *p = ( QRgb*)QImage::constScanLine(i);
         QRgb *pp1 = ( QRgb*)QImage::constScanLine(i+1);
+        pm1++;
+        p++;
+        pp1++;
+        q++;
         QRgb *end = p +  QImage::size().width()-1;
         while (p < end) {
 
@@ -277,8 +250,40 @@ QImage ImageManip::verticalEdgeDetection(){
 
 QImage ImageManip::sobelTransformation(){
     QImage horres = this->horizontalEdgeDetection();
-    ImageManip res = ImageManip(horres.bits(),horres.width(),horres.height(),horres.format());
-    return res.verticalEdgeDetection();
+    QImage verres = this->verticalEdgeDetection();
+    QImage res = QImage(QImage::size(),QImage::format());
+    for (int i = 0; i < QImage::size().height(); i++) {
+        QRgb *q = (QRgb*) res.scanLine(i);
+        //QRgb *p = ( QRgb*)QImage::constScanLine(i);
+        QRgb *ph = ( QRgb*)horres.scanLine(i);
+        QRgb *pv = ( QRgb*)verres.scanLine(i);
+        QRgb *end = q +  QImage::size().width();
+        while (q < end) {
+
+            //int red =(int) sqrt((qRed(*ph)^2)+(qRed(*pv)^2));
+            int red =qRed(*ph)+qRed(*pv);
+            if (red>255) red=255;
+            if (red<0) red=0;
+
+            //int green =(int) sqrt((qGreen(*ph)^2)+(qGreen(*pv)^2));
+            int green =qGreen(*ph)+qGreen(*pv);
+            if (green>255) green=255;
+            if (green<0) green=0;
+
+            //int blue =(int) sqrt((qBlue(*ph)^2)+(qBlue(*pv)^2));
+            int blue =qBlue(*ph)+qBlue(*pv);
+            if (blue>255) blue=255;
+            if (blue<0) blue=0;
+            *q = qRgba(red,green,blue,255);
+            //p++;
+            ph++;
+            pv++;
+            q++;
+        }
+    }
+    return res;
+    //ImageManip res = ImageManip(horres.bits(),horres.width(),horres.height(),horres.format());
+    //return res.verticalEdgeDetection();
 }
 
 QImage ImageManip::laplacianTransformation(){
@@ -327,6 +332,44 @@ QImage ImageManip::laplacianTransformation(){
     }
     return res;
 }
+
+QImage ImageManip::heavyBlur(){
+    QImage res = QImage(QImage::size(),QImage::format());
+    for (int i = 1; i < QImage::size().height()-1; i++) {
+        QRgb *q = (QRgb*) res.scanLine(i);
+        QRgb *pm1 = ( QRgb*)QImage::constScanLine(i-1);
+        QRgb *p = ( QRgb*)QImage::constScanLine(i);
+        QRgb *pp1 = ( QRgb*)QImage::constScanLine(i+1);
+        QRgb *end = p +  QImage::size().width()-1;
+        while (p < end) {
+
+            int red = (qRed(*(pm1-1))*hblurmsk[0][0] + qRed(*(pm1))*hblurmsk[0][1] + qRed(*(pm1+1))*hblurmsk[0][2] +
+                      qRed(*(p-1))*hblurmsk[1][0] + qRed(*(p))*hblurmsk[1][1] + qRed(*(p+1))*hblurmsk[1][2] +
+                      qRed(*(pp1)-1)*hblurmsk[2][0] + qRed(*(pp1))*hblurmsk[2][1] + qRed(*(pp1+1))*hblurmsk[2][2])/9;
+            if (red>255) red=255;
+            if (red<0) red=0;
+
+            int green = (qGreen(*(pm1-1))*hblurmsk[0][0] + qGreen(*(pm1))*hblurmsk[0][1] + qGreen(*(pm1+1))*hblurmsk[0][2] +
+                      qGreen(*(p-1))*hblurmsk[1][0] + qGreen(*p)*hblurmsk[1][1] + qGreen(*(p+1))*hblurmsk[1][2] +
+                      qGreen(*(pp1-1))*hblurmsk[2][0] + qGreen(*pp1)*hblurmsk[2][1] + qGreen(*(pp1+1))*hblurmsk[2][2])/9;
+            if (green>255) green=255;
+            if (green<0) green=0;
+
+            int blue = (qBlue(*(pm1-1))*hblurmsk[0][0] + qBlue(*pm1)*hblurmsk[0][1] + qBlue(*(pm1+1))*hblurmsk[0][2] +
+                      qBlue(*(p-1))*hblurmsk[1][0] + qBlue(*p)*hblurmsk[1][1] + qBlue(*(p+1))*hblurmsk[1][2] +
+                      qBlue(*(pp1-1))*hblurmsk[2][0] + qBlue(*pp1)*hblurmsk[2][1] + qBlue(*(pp1+1))*hblurmsk[2][2])/9;
+            if (blue>255) blue=255;
+            if (blue<0) blue=0;
+            *q = qRgba(red,green,blue,255);
+            pm1++;
+            p++;
+            pp1++;
+            q++;
+        }
+    }
+    return res;
+}
+
 
 void ImageManip::operator = (const QImage& base_)
 {

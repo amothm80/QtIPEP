@@ -87,17 +87,42 @@ void MainWindow::on_actionRGBSwap_triggered(){
     activeMdiChild()->RGBSwap();
 }
 
+void MainWindow::on_actionUndo_triggered(){
+    activeMdiChild()->undoAction();
+}
+
+void MainWindow::on_actionRedo_triggered(){
+    activeMdiChild()->redoAction();
+}
+
 void MainWindow::on_actionIncreaseBrightness_triggered(){
-    activeMdiChild()->increaseBrightness();
+    activeMdiChild()->increaseBrightness(1);
 }
 void MainWindow::on_actionDecreaseBrightness_triggered(){
-    activeMdiChild()->decreaseBrightness();
+    activeMdiChild()->decreaseBrightness(1);
+}
+
+void MainWindow::actionBrightness_accepted(int v){
+    if (v > 0)
+        activeMdiChild()->increaseBrightness(v);
+    else if (v < 0)
+        activeMdiChild()->decreaseBrightness(abs(v));
+}
+
+void MainWindow::on_actionBrightness_triggered(){
+    BrightnessDialog d;
+    connect(&d,SIGNAL(brightnessValue(int)),this,SLOT(actionBrightness_accepted(int)));
+    d.exec();
 }
 
 void MainWindow::on_actionRGB_triggered(){
     RGBDialog d;
+    connect(&d,SIGNAL(RGBValues(int,int,int)),this,SLOT(actionRGB_accepted(int,int,int)));
     d.exec();
-    //activeMdiChild()->modifyRGB();
+}
+
+void MainWindow::actionRGB_accepted(int r, int g, int b){
+    activeMdiChild()->modifyRGB(r,g,b);
 }
 
 void MainWindow::on_actionHorizontalEdges_triggered(){

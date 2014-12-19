@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>416</width>
+    <width>472</width>
     <height>217</height>
    </rect>
   </property>
@@ -16,7 +16,7 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>100</x>
      <y>170</y>
      <width>341</width>
      <height>32</height>
@@ -39,10 +39,10 @@
     </rect>
    </property>
    <property name="minimum">
-    <number>-255</number>
+    <number>-50</number>
    </property>
    <property name="maximum">
-    <number>255</number>
+    <number>50</number>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -58,10 +58,10 @@
     </rect>
    </property>
    <property name="minimum">
-    <number>-255</number>
+    <number>-50</number>
    </property>
    <property name="maximum">
-    <number>255</number>
+    <number>50</number>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -77,10 +77,10 @@
     </rect>
    </property>
    <property name="minimum">
-    <number>-255</number>
+    <number>-50</number>
    </property>
    <property name="maximum">
-    <number>255</number>
+    <number>50</number>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -125,9 +125,96 @@
     <string>Blue</string>
    </property>
   </widget>
+  <widget class="QLabel" name="labelRedVal">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>30</y>
+     <width>51</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelGreenVal">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>80</y>
+     <width>51</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelBlueVal">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>130</y>
+     <width>51</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>
+  <connection>
+   <sender>horizontalSliderRed</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>labelRedVal</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>415</x>
+     <y>40</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderGreen</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>labelGreenVal</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>89</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>415</x>
+     <y>90</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSliderBlue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>labelBlueVal</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>230</x>
+     <y>139</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>415</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
@@ -135,12 +222,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>270</x>
+     <y>185</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>235</x>
+     <y>108</y>
     </hint>
    </hints>
   </connection>
@@ -151,12 +238,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>270</x>
+     <y>185</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>235</x>
+     <y>108</y>
     </hint>
    </hints>
   </connection>

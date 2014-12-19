@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>702</width>
-    <height>512</height>
+    <width>579</width>
+    <height>410</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>702</width>
+     <width>579</width>
      <height>21</height>
     </rect>
    </property>
@@ -47,8 +47,8 @@
     <property name="title">
      <string>Image</string>
     </property>
-    <addaction name="actionHeight"/>
-    <addaction name="actionWidth"/>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
    </widget>
    <widget class="QMenu" name="menuEdges">
     <property name="title">
@@ -74,8 +74,7 @@
     <property name="title">
      <string>Adjust</string>
     </property>
-    <addaction name="actionIncreaseBrightness"/>
-    <addaction name="actionDecreaseBrightness"/>
+    <addaction name="actionBrightness"/>
     <addaction name="actionGrayScale"/>
     <addaction name="actionGammaCorrection"/>
     <addaction name="actionNegative"/>
@@ -114,14 +113,14 @@
     <string>Quit</string>
    </property>
   </action>
-  <action name="actionHeight">
+  <action name="actionUndo">
    <property name="text">
-    <string>Height</string>
+    <string>Undo</string>
    </property>
   </action>
-  <action name="actionWidth">
+  <action name="actionRedo">
    <property name="text">
-    <string>Width</string>
+    <string>Redo</string>
    </property>
   </action>
   <action name="actionHorizontalEdges">
@@ -239,6 +238,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionBrightness">
+   <property name="text">
+    <string>Brightness</string>
    </property>
   </action>
  </widget>

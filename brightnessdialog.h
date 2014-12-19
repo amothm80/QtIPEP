@@ -15,7 +15,11 @@ public:
     explicit BrightnessDialog(QWidget *parent = 0);
     ~BrightnessDialog();
 
+signals:
+    void brightnessValue(int);
+
 private:
+    void accept();
     Ui::BrightnessDialog *ui;
 };
 

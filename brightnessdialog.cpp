@@ -8,6 +8,12 @@ BrightnessDialog::BrightnessDialog(QWidget *parent) :
     ui->setupUi(this);
 }
 
+void BrightnessDialog::accept(){
+    emit brightnessValue(ui->horizontalSliderBrightness->value());
+    QDialog::accept();
+}
+
+
 BrightnessDialog::~BrightnessDialog()
 {
     delete ui;

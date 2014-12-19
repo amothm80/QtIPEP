@@ -16,6 +16,45 @@ MdiChild::MdiChild()
 
     setBackgroundRole(QPalette::Dark);
     setWidget(imageLabel);
+    images = new imageNode;
+
+}
+
+void MdiChild::createImagesList(ImageManip img){
+    images->image = img;
+    images->next = NULL;
+    images->prev = NULL;
+}
+
+void MdiChild::addImage(ImageManip img){
+    imageNode * temp = new imageNode;
+    temp->image = img;
+    temp->prev = images;
+    temp->next = NULL;
+    images->next = temp;
+    images = temp;
+}
+
+
+void MdiChild::addImage(QImage img){
+    imageNode * temp = new imageNode;
+    temp->image = img;
+    temp->prev = images;
+    temp->next = NULL;
+    images->next = temp;
+    images = temp;
+}
+
+void MdiChild::undoAction(){
+    if (images->prev != NULL)
+        images = images->prev;
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+}
+
+void MdiChild::redoAction(){
+    if (images->next != NULL)
+        images = images->next;
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
 MdiChild::~MdiChild()
@@ -24,9 +63,10 @@ MdiChild::~MdiChild()
 }
 
 bool MdiChild::loadFile(const QString &fileName){
-    image = ImageManip(fileName);
+    //image = ImageManip(fileName);//
+    createImagesList(ImageManip(fileName));
     QSize mdiAreaSize = parentWidget()->parentWidget()->parentWidget()->size();
-    if (image.isNull()) {
+    if (images->image.isNull()) {
         QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
                              tr("Cannot load %1.").arg(QDir::toNativeSeparators(fileName)));
         setWindowFilePath(QString());
@@ -36,15 +76,15 @@ bool MdiChild::loadFile(const QString &fileName){
     }
     scaleFactor = 1.0;
 
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+    imageLabel->setPixmap(QPixmap::fromImage(images->image/*image*/));
 
 
-    if (image.width() > mdiAreaSize.width() ||
-            image.height() > mdiAreaSize.height()){
-        image = image.scaled(mdiAreaSize.width() * 4/5,mdiAreaSize.height()*4/5, Qt::KeepAspectRatio);
+    if (images->image.width() > mdiAreaSize.width() ||
+            images->image.height() > mdiAreaSize.height()){
+        images->image = images->image.scaled(mdiAreaSize.width() * 4/5,mdiAreaSize.height()*4/5, Qt::KeepAspectRatio);
         //imageLabel->resize(mdiAreaSize * 4/5);
     }
-    imageLabel->resize(image.size());
+    imageLabel->resize(images->image.size());
     resize(imageLabel->size());
     parentWidget()->setMaximumSize(size().width()+18,size().height()+40);
     parentWidget()->resize(size().width()+18,size().height()+40);
@@ -60,51 +100,57 @@ bool MdiChild::loadFile(const QString &fileName){
 //}
 
 void MdiChild::RGBSwap(){
-    image = image.rgbSwapped();
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+    //image = image.rgbSwapped();
+    addImage(images->image.rgbSwapped());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
-void MdiChild::increaseBrightness(){
-    image = image.increaseBrightness(1);
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+void MdiChild::increaseBrightness(int v){
+    addImage(images->image.increaseBrightness(v));
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
-void MdiChild::decreaseBrightness(){
-    image = image.decreaseBrightness(1);
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+void MdiChild::decreaseBrightness(int v){
+    addImage(images->image.decreaseBrightness(v));
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
-void MdiChild::modifyRGB(){
-    image = image.modifyRGB(30,30,30);
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+void MdiChild::modifyRGB(const int r, const int g, const int b){
+    addImage(images->image.modifyRGB(r,g,b));
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
 void MdiChild::horizontalEdges(){
-    image = image.horizontalEdgeDetection();
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+    addImage(images->image.horizontalEdgeDetection());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
 void MdiChild::verticalEdges(){
-    image = image.verticalEdgeDetection();
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+    addImage(images->image.verticalEdgeDetection());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 void MdiChild::sobel(){
-    image = image.sobelTransformation();
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+    addImage(images->image.sobelTransformation());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
 void MdiChild::heavyBlur(){
-    image = image.heavyBlur();
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+    addImage(images->image.heavyBlur());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
 void MdiChild::laplacian(){
-    image = image.laplacianTransformation();
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+    addImage(images->image.laplacianTransformation());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
 void MdiChild::grayScale(){
-    image = image.convertGrayScale();
-    imageLabel->setPixmap(QPixmap::fromImage(image));
+    addImage(images->image.convertGrayScale());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+}
+
+void MdiChild::negative(){
+    addImage(images->image.negative());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
 void MdiChild::zoomIn(){
@@ -112,11 +158,6 @@ void MdiChild::zoomIn(){
         currentScaleFactor *= 1.1;
         imageLabel->resize(currentScaleFactor * imageLabel->pixmap()->size());
     }
-}
-
-void MdiChild::negative(){
-    image = image.negative();
-    imageLabel->setPixmap(QPixmap::fromImage(image));
 }
 
 void MdiChild::zoomOut(){
