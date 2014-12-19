@@ -6,6 +6,8 @@ BrightnessDialog::BrightnessDialog(QWidget *parent) :
     ui(new Ui::BrightnessDialog)
 {
     ui->setupUi(this);
+    setWindowTitle("Brightness");
+    setWindowIcon(QIcon(":/icons/image.ico"));
 }
 
 void BrightnessDialog::accept(){

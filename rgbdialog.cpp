@@ -6,6 +6,8 @@ RGBDialog::RGBDialog(QWidget *parent) :
     ui(new Ui::RGBDialog)
 {
     ui->setupUi(this);
+    setWindowTitle("RGB");
+    setWindowIcon(QIcon(":/icons/image.ico"));
 
 }
 
