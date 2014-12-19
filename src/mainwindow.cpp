@@ -18,10 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mdiArea->resize(size());
     setWindowTitle("QtIPEP");
     setWindowIcon(QIcon(":/icons/image.ico"));
-
-
-//    this->loadFile("D:/Users/Ahmed/Pictures/4 x 6 cm 1.jpg");
-
 }
 
 void MainWindow::resizeEvent( QResizeEvent *e )
@@ -63,6 +59,7 @@ void MainWindow::on_actionOpenImage_triggered()
 }
 
 void MainWindow::on_actionSaveImage_triggered(){
+    if (activeMdiChild()){
     MdiChild *mdi = activeMdiChild();
     QStringList mimeTypeFilters;
     foreach (const QByteArray &mimeTypeName, QImageReader::supportedMimeTypes())
@@ -75,6 +72,7 @@ void MainWindow::on_actionSaveImage_triggered(){
     dialog.selectMimeTypeFilter("image/jpeg");
 
     while (dialog.exec() == QDialog::Accepted && !saveFile(dialog.selectedFiles().first(), mdi)) {}
+    }
 }
 
 bool MainWindow::loadFile(const QString &fileName)
@@ -105,59 +103,75 @@ MdiChild *MainWindow::activeMdiChild()
 }
 
 void MainWindow::on_actionRGBSwap_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->RGBSwap();
 }
 
 void MainWindow::on_actionUndo_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->undoAction();
 }
 
 void MainWindow::on_actionRedo_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->redoAction();
 }
 
 void MainWindow::on_actionIncreaseBrightness_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->increaseBrightness(1);
 }
 void MainWindow::on_actionDecreaseBrightness_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->decreaseBrightness(1);
 }
 
 void MainWindow::actionBrightness_accepted(int v){
+    if (activeMdiChild()){
     if (v > 0)
         activeMdiChild()->increaseBrightness(v);
     else if (v < 0)
         activeMdiChild()->decreaseBrightness(abs(v));
+    }
 }
 
 void MainWindow::on_actionBrightness_triggered(){
+    if (activeMdiChild()){
     BrightnessDialog d;
     connect(&d,SIGNAL(brightnessValue(int)),this,SLOT(actionBrightness_accepted(int)));
     d.exec();
+    }
 }
 
 void MainWindow::on_actionRGB_triggered(){
+    if (activeMdiChild()){
     RGBDialog d;
     connect(&d,SIGNAL(RGBValues(int,int,int)),this,SLOT(actionRGB_accepted(int,int,int)));
     d.exec();
+    }
 }
 
 void MainWindow::actionRGB_accepted(int r, int g, int b){
+    if (activeMdiChild())
     activeMdiChild()->modifyRGB(r,g,b);
 }
 
 void MainWindow::on_actionHorizontalEdges_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->horizontalEdges();
 }
 
 void MainWindow::on_actionVerticalEdges_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->verticalEdges();
 }
 void MainWindow::on_actionSobel_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->sobel();
 }
 
 void MainWindow::on_actionHeavyBlur_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->heavyBlur();
 }
 
@@ -166,19 +180,43 @@ void MainWindow::on_actionLaplacian_triggered(){
 }
 
 void MainWindow::on_actionZoomIn_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->zoomIn();
 }
 
 void MainWindow::on_actionNegative_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->negative();
 }
 
 void MainWindow::on_actionZoomOut_triggered(){
+    if (activeMdiChild())
     activeMdiChild()->zoomOut();
 }
 
 void MainWindow::on_actionGrayScale_triggered(){
-    activeMdiChild()->grayScale();
+    if (activeMdiChild())
+        activeMdiChild()->grayScale();
+}
+
+void MainWindow::on_actionHorizontalFlip_triggered(){
+    if (activeMdiChild())
+        activeMdiChild()->horizontalFlip();
+}
+
+void MainWindow::on_actionVerticalFlip_triggered(){
+    if (activeMdiChild())
+        activeMdiChild()->verticalFlip();
+}
+
+void MainWindow::on_actionRotateClockwise_triggered(){
+    if (activeMdiChild())
+        activeMdiChild()->rotateClockwise();
+}
+
+void MainWindow::on_actionRotateAnticlockwise_triggered(){
+    if (activeMdiChild())
+        activeMdiChild()->rotateAntiClockwise();
 }
 
 MainWindow::~MainWindow()

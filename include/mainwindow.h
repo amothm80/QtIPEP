@@ -54,6 +54,10 @@ private slots:
     void on_actionRGB_triggered();
     void on_actionUndo_triggered();
     void on_actionRedo_triggered();
+    void on_actionHorizontalFlip_triggered();
+    void on_actionVerticalFlip_triggered();
+    void on_actionRotateClockwise_triggered();
+    void on_actionRotateAnticlockwise_triggered();
     // on_XXX slots are only used for auto-connect and cannot be used
     // in normal connect fucntions
     //void on_actionRGB_accepted(int r,int g,int b);

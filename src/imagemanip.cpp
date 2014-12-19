@@ -371,16 +371,53 @@ QImage ImageManip::heavyBlur(){
 }
 
 QImage ImageManip::rotateClockwise(){
-    QImage res = QImage(QImage::height(), QImage::width(),QImage::format());
+    //cos(90) = 0, sin(90) = 1
+    //x2 = -i + y/2 + x/2
+    //y2 = j - x/2 + y/2
+    QImage res = QImage(QImage::size().height(), QImage::size().width(),QImage::format());
+    for (int i = 0; i < QImage::size().height(); i++) {
+        //uint *q = (uint*)res.scanLine(i);
+        const uint *p = (const uint*)QImage::constScanLine(i);
+        const uint *end = p +  QImage::size().width();
+        int j = 0;
+        while (p < end) {
+            uint c = *p;
+            int x = QImage::size().height() -i-1;
+            int y = j;
+            uint *q = (uint*)res.scanLine(y);
+            q += x;
+            *q = c;
+            j++;
+            p++;
+            //q++;
+        }
+    }
+    return res;
 }
 
 QImage ImageManip::rotateAntiClockwise(){
-    QImage res = QImage(QImage::height(), QImage::width(),QImage::format());
+    //cos(-90) = 0, sin(-90) = -1
+    QImage res = QImage(QImage::size().height(), QImage::size().width(),QImage::format());
+    for (int i = 0; i < QImage::size().height(); i++) {
+        //uint *q = (uint*)res.scanLine(i);
+        const uint *p = (const uint*)QImage::constScanLine(i);
+        const uint *end = p +  QImage::size().width();
+        int j = 0;
+        while (p < end) {
+            uint c = *p;
+            int x = i;
+            int y = QImage::size().width() - j -1;
+            uint *q = (uint*)res.scanLine(y);
+            q += x;
+            *q = c;
+            j++;
+            p++;
+        }
+    }
+    return res;
 }
 
 void ImageManip::operator = (const QImage& base_)
 {
   QImage::operator=(base_);
 }
-
-

@@ -49,17 +49,33 @@ void MdiChild::undoAction(){
     if (images->prev != NULL)
         images = images->prev;
     imageLabel->setPixmap(QPixmap::fromImage(images->image));
+    imageLabel->resize(images->image.size());
+    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+    parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
 }
 
 void MdiChild::redoAction(){
     if (images->next != NULL)
         images = images->next;
     imageLabel->setPixmap(QPixmap::fromImage(images->image));
+    imageLabel->resize(images->image.size());
+    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+    parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
 }
 
 MdiChild::~MdiChild()
 {
-
+    while(images->next != NULL)
+        images = images->next;
+    while(images->prev != NULL){
+        images->image.~QImage();
+        images = images->prev;
+        delete images->next;
+        images->next = NULL;
+    }
+    images->image.~QImage();
+    delete images->next;
+    images->next = 0;
 }
 
 bool MdiChild::loadFile(const QString &fileName){
@@ -85,9 +101,8 @@ bool MdiChild::loadFile(const QString &fileName){
         //imageLabel->resize(mdiAreaSize * 4/5);
     }
     imageLabel->resize(images->image.size());
-    resize(imageLabel->size());
-    parentWidget()->setMaximumSize(size().width()+18,size().height()+40);
-    parentWidget()->resize(size().width()+18,size().height()+40);
+    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+    parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
     setWindowFilePath(fileName);
     setWindowTitle(fileName);
     setWindowIcon(QIcon(":/icons/image.ico"));
@@ -184,5 +199,21 @@ void MdiChild::zoomOut(){
         currentScaleFactor *= 0.9;
         imageLabel->resize(currentScaleFactor * imageLabel->pixmap()->size());
     }
+}
+
+void MdiChild::rotateClockwise(){
+    addImage(images->image.rotateClockwise());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+    imageLabel->resize(images->image.size());
+    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+    parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+}
+
+void MdiChild::rotateAntiClockwise(){
+    addImage(images->image.rotateAntiClockwise());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+    imageLabel->resize(images->image.size());
+    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+    parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
 }
 
