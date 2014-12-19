@@ -33,7 +33,11 @@ private slots:
     MdiChild *createMdiChild();
     void setActiveSubWindow(QWidget *window);   
     bool loadFile(const QString &);
+    bool saveFile(const QString &, MdiChild *mdi);
+
     void on_actionOpenImage_triggered();
+    void on_actionSaveImage_triggered();
+
     void on_actionRGBSwap_triggered();
     void on_actionZoomIn_triggered();
     void on_actionZoomOut_triggered();

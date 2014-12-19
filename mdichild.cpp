@@ -94,6 +94,15 @@ bool MdiChild::loadFile(const QString &fileName){
     return true;
 }
 
+bool MdiChild::saveFile(const QString &fileName){
+    if (!images->image.save(fileName)) {
+        QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
+                             tr("Cannot save %1.").arg(QDir::toNativeSeparators(fileName)));
+        return false;
+    };
+    return true;
+}
+
 //void MdiChild::closeEvent(QCloseEvent *event)
 //{
 

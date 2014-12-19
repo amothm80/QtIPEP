@@ -62,11 +62,32 @@ void MainWindow::on_actionOpenImage_triggered()
     while (dialog.exec() == QDialog::Accepted && !loadFile(dialog.selectedFiles().first())) {}
 }
 
+void MainWindow::on_actionSaveImage_triggered(){
+    MdiChild *mdi = activeMdiChild();
+    QStringList mimeTypeFilters;
+    foreach (const QByteArray &mimeTypeName, QImageReader::supportedMimeTypes())
+        mimeTypeFilters.append(mimeTypeName);
+    const QStringList picturesLocations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+    QFileDialog dialog(this,tr("Save Image"),
+                picturesLocations.isEmpty() ? QDir::currentPath() : picturesLocations.first());
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setMimeTypeFilters(mimeTypeFilters);
+    dialog.selectMimeTypeFilter("image/jpeg");
+
+    while (dialog.exec() == QDialog::Accepted && !saveFile(dialog.selectedFiles().first(), mdi)) {}
+}
+
 bool MainWindow::loadFile(const QString &fileName)
 {
     MdiChild *child = createMdiChild();
     child->show();
     return child->loadFile(fileName);
+}
+
+
+bool MainWindow::saveFile(const QString &fileName, MdiChild *mdi)
+{
+    return mdi->saveFile(fileName);
 }
 
 void MainWindow::setActiveSubWindow(QWidget *window)

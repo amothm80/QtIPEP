@@ -67,6 +67,7 @@ public:
     ~MdiChild();
 
     bool loadFile(const QString &);
+    bool saveFile(const QString &);
     void undoAction();
     void redoAction();
     void RGBSwap();
