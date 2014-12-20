@@ -41,7 +41,6 @@ QImage ImageManip::negative(){
 }
 
 QImage ImageManip::increaseBrightness(const int brgtval){
-    uint v = ((((((0xff << 8 ) | ( brgtval & 0xff )) << 8) | ( brgtval & 0xff )) << 8) | ( brgtval & 0xff ));
     QImage res = QImage(QImage::size(),QImage::format());
     for (int i = 0; i < QImage::size().height(); i++) {
         uint *q = (uint*)res.scanLine(i);
@@ -49,13 +48,20 @@ QImage ImageManip::increaseBrightness(const int brgtval){
         const uint *end = p +  QImage::size().width();
         while (p < end) {
             uint c = *p;
-            if (((( c & 0xff ) + (v & 0xff)) <= 0xff) &&
-                ((( (c >> 8) & 0xff ) + ((v >> 8) & 0xff)) <= 0xff) &&
-                    ((( (c >> 16) & 0xff ) + ((v>>16) & 0xff)) <= 0xff)) {
-                *q = c + v;
-            }else{
-                *q = c;
-            }
+            int nr = qRed(c) + brgtval;
+            if (nr>255) nr = 255;
+            if (nr<0) nr=0;
+
+            int ng = qGreen(c) + brgtval;
+            if (ng>255) ng = 255;
+            if (ng<0) ng=0;
+
+            int nb = qBlue(c) + brgtval;
+            if (nb>255) nb = 255;
+            if (nb<0) nb=0;
+
+            *q = qRgba(nr, ng, nb, 255);
+
             p++;
             q++;
         }
@@ -64,7 +70,6 @@ QImage ImageManip::increaseBrightness(const int brgtval){
 }
 
 QImage ImageManip::decreaseBrightness(const int brgtval){
-    uint v = ((((((0xff << 8 ) | ( brgtval & 0xff )) << 8) | ( brgtval & 0xff )) << 8) | ( brgtval & 0xff ));
     QImage res = QImage(QImage::size(),QImage::format());
     for (int i = 0; i < QImage::size().height(); i++) {
         uint *q = (uint*)res.scanLine(i);
@@ -72,13 +77,20 @@ QImage ImageManip::decreaseBrightness(const int brgtval){
         const uint *end = p +  QImage::size().width();
         while (p < end) {
             uint c = *p;
-            if (((( c & 0xff ) - (v & 0xff)) > 0x00) &&
-                ((( (c >> 8) & 0xff ) - ((v >> 8) & 0xff)) > 0x00) &&
-                    ((( (c >> 16) & 0xff ) - ((v>>16) & 0xff)) > 0x00)) {
-                *q = c - v;
-            }else{
-                *q = c;
-            }
+            int nr = qRed(c) - brgtval;
+            if (nr>255) nr = 255;
+            if (nr<0) nr=0;
+
+            int ng = qGreen(c) - brgtval;
+            if (ng>255) ng = 255;
+            if (ng<0) ng=0;
+
+            int nb = qBlue(c) - brgtval;
+            if (nb>255) nb = 255;
+            if (nb<0) nb=0;
+
+            *q = qRgba(nr, ng, nb, 255);
+
             p++;
             q++;
         }
@@ -87,10 +99,6 @@ QImage ImageManip::decreaseBrightness(const int brgtval){
 }
 
 QImage ImageManip::modifyRGB(const int r, const int g, const int b){
-    QRgb ar = qRgb(abs(r),     0,     0);
-    QRgb ag = qRgb(     0,abs(g),     0);
-    QRgb ab = qRgb(     0,     0,abs(b));
-    uint v = ((((((0xff << 8 ) | ( r & 0xff )) << 8) | ( g & 0xff )) << 8) | ( b & 0xff ));
     QImage res = QImage(QImage::size(),QImage::format());
     for (int i = 0; i < QImage::size().height(); i++) {
         uint *q = (uint*)res.scanLine(i);
@@ -98,13 +106,19 @@ QImage ImageManip::modifyRGB(const int r, const int g, const int b){
         const uint *end = p +  QImage::size().width();
         while (p < end) {
             uint c = *p;
-            if (((( c & 0xff ) + (v & 0xff)) <= 0xff) &&
-                ((( (c >> 8) & 0xff ) + ((v >> 8) & 0xff)) <= 0xff) &&
-                    ((( (c >> 16) & 0xff ) + ((v>>16) & 0xff)) <= 0xff)) {
-                *q = c + v;
-            }else{
-                *q = c;
-            }
+            int nr = qRed(c) + r;
+            if (nr>255) nr = 255;
+            if (nr<0) nr=0;
+
+            int ng = qGreen(c) + g;
+            if (ng>255) ng = 255;
+            if (ng<0) ng=0;
+
+            int nb = qBlue(c) + b;
+            if (nb>255) nb = 255;
+            if (nb<0) nb=0;
+
+            *q = qRgba(nr, ng, nb, 255);
             p++;
             q++;
         }

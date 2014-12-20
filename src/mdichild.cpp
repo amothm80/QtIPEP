@@ -73,9 +73,11 @@ MdiChild::~MdiChild()
         delete images->next;
         images->next = NULL;
     }
-    images->image.~QImage();
-    delete images->next;
-    images->next = 0;
+    if (images != NULL){
+        images->image.~QImage();
+        delete images->next;
+        images->next = 0;
+    }
 }
 
 bool MdiChild::loadFile(const QString &fileName){
