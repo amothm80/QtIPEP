@@ -39,9 +39,12 @@ FORMS    +=   \
 
 QMAKE_CXXFLAGS += -std=c++11 -static-libstdc++
 
-DISTFILES +=
+DISTFILES += \
+    QtIPEP.rc
 
 INCLUDEPATH += include
 
 RESOURCES += \
     resources.qrc
+
+RC_FILE = QtIPEP.rc
