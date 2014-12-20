@@ -98,6 +98,35 @@ QImage ImageManip::decreaseBrightness(const int brgtval){
     return res;
 }
 
+QImage ImageManip::gammaCorrection(const double gamma){
+    QImage res = QImage(QImage::size(),QImage::format());
+    for (int i = 0; i < QImage::size().height(); i++) {
+        uint *q = (uint*)res.scanLine(i);
+        const uint *p = (const uint*)QImage::constScanLine(i);
+        const uint *end = p +  QImage::size().width();
+        while (p < end) {
+            uint c = *p;
+            int nr =pow(qRed(c),(1/gamma));
+            if (nr>255) nr = 255;
+            if (nr<0) nr=0;
+
+            int ng = pow(qGreen(c),(1/gamma));
+            if (ng>255) ng = 255;
+            if (ng<0) ng=0;
+
+            int nb = pow(qBlue(c),(1/gamma));
+            if (nb>255) nb = 255;
+            if (nb<0) nb=0;
+
+            *q = qRgba(nr, ng, nb, 255);
+
+            p++;
+            q++;
+        }
+    }
+    return res;
+}
+
 QImage ImageManip::modifyRGB(const int r, const int g, const int b){
     QImage res = QImage(QImage::size(),QImage::format());
     for (int i = 0; i < QImage::size().height(); i++) {
@@ -274,18 +303,18 @@ QImage ImageManip::sobelTransformation(){
         QRgb *end = q +  QImage::size().width();
         while (q < end) {
 
-            //int red =(int) sqrt((qRed(*ph)^2)+(qRed(*pv)^2));
-            int red =qRed(*ph)+qRed(*pv);
+            int red =(int) sqrt(pow(qRed(*ph),2)+pow(qRed(*pv),2));
+            //int red =qRed(*ph)+qRed(*pv);
             if (red>255) red=255;
             if (red<0) red=0;
 
-            //int green =(int) sqrt((qGreen(*ph)^2)+(qGreen(*pv)^2));
-            int green =qGreen(*ph)+qGreen(*pv);
+            int green =(int) sqrt(pow(qGreen(*ph),2)+pow(qGreen(*pv),2));
+            //int green =qGreen(*ph)+qGreen(*pv);
             if (green>255) green=255;
             if (green<0) green=0;
 
-            //int blue =(int) sqrt((qBlue(*ph)^2)+(qBlue(*pv)^2));
-            int blue =qBlue(*ph)+qBlue(*pv);
+            int blue =(int) sqrt(pow(qBlue(*ph),2)+pow(qBlue(*pv),2));
+            //int blue =qBlue(*ph)+qBlue(*pv);
             if (blue>255) blue=255;
             if (blue<0) blue=0;
             *q = qRgba(red,green,blue,255);
@@ -348,6 +377,117 @@ QImage ImageManip::laplacianTransformation(){
 }
 
 QImage ImageManip::heavyBlur(){
+    QImage res = QImage(QImage::size(),QImage::format());
+    for (int i = 1; i < QImage::size().height()-1; i++) {
+        QRgb *q = (QRgb*) res.scanLine(i);
+        QRgb *pm1 = ( QRgb*)QImage::constScanLine(i-1);
+        QRgb *p = ( QRgb*)QImage::constScanLine(i);
+        QRgb *pp1 = ( QRgb*)QImage::constScanLine(i+1);
+        QRgb *end = p +  QImage::size().width()-1;
+        while (p < end) {
+
+            int red = (qRed(*(pm1-1))*hblurmsk[0][0] + qRed(*(pm1))*hblurmsk[0][1] + qRed(*(pm1+1))*hblurmsk[0][2] +
+                      qRed(*(p-1))*hblurmsk[1][0] + qRed(*(p))*hblurmsk[1][1] + qRed(*(p+1))*hblurmsk[1][2] +
+                      qRed(*(pp1)-1)*hblurmsk[2][0] + qRed(*(pp1))*hblurmsk[2][1] + qRed(*(pp1+1))*hblurmsk[2][2])/9;
+            if (red>255) red=255;
+            if (red<0) red=0;
+
+            int green = (qGreen(*(pm1-1))*hblurmsk[0][0] + qGreen(*(pm1))*hblurmsk[0][1] + qGreen(*(pm1+1))*hblurmsk[0][2] +
+                      qGreen(*(p-1))*hblurmsk[1][0] + qGreen(*p)*hblurmsk[1][1] + qGreen(*(p+1))*hblurmsk[1][2] +
+                      qGreen(*(pp1-1))*hblurmsk[2][0] + qGreen(*pp1)*hblurmsk[2][1] + qGreen(*(pp1+1))*hblurmsk[2][2])/9;
+            if (green>255) green=255;
+            if (green<0) green=0;
+
+            int blue = (qBlue(*(pm1-1))*hblurmsk[0][0] + qBlue(*pm1)*hblurmsk[0][1] + qBlue(*(pm1+1))*hblurmsk[0][2] +
+                      qBlue(*(p-1))*hblurmsk[1][0] + qBlue(*p)*hblurmsk[1][1] + qBlue(*(p+1))*hblurmsk[1][2] +
+                      qBlue(*(pp1-1))*hblurmsk[2][0] + qBlue(*pp1)*hblurmsk[2][1] + qBlue(*(pp1+1))*hblurmsk[2][2])/9;
+            if (blue>255) blue=255;
+            if (blue<0) blue=0;
+            *q = qRgba(red,green,blue,255);
+            pm1++;
+            p++;
+            pp1++;
+            q++;
+        }
+    }
+    return res;
+}
+
+QImage ImageManip::lightBlur(){
+    QImage res = QImage(QImage::size(),QImage::format());
+    for (int i = 1; i < QImage::size().height()-1; i++) {
+        QRgb *q = (QRgb*) res.scanLine(i);
+        QRgb *pm1 = ( QRgb*)QImage::constScanLine(i-1);
+        QRgb *p = ( QRgb*)QImage::constScanLine(i);
+        QRgb *pp1 = ( QRgb*)QImage::constScanLine(i+1);
+        QRgb *end = p +  QImage::size().width()-1;
+        while (p < end) {
+
+            int red = (qRed(*(pm1-1))*lblurmsk[0][0] + qRed(*(pm1))*lblurmsk[0][1] + qRed(*(pm1+1))*lblurmsk[0][2] +
+                      qRed(*(p-1))*lblurmsk[1][0] + qRed(*(p))*lblurmsk[1][1] + qRed(*(p+1))*lblurmsk[1][2] +
+                      qRed(*(pp1)-1)*lblurmsk[2][0] + qRed(*(pp1))*lblurmsk[2][1] + qRed(*(pp1+1))*lblurmsk[2][2])/9;
+            if (red>255) red=255;
+            if (red<0) red=0;
+
+            int green = (qGreen(*(pm1-1))*lblurmsk[0][0] + qGreen(*(pm1))*lblurmsk[0][1] + qGreen(*(pm1+1))*lblurmsk[0][2] +
+                      qGreen(*(p-1))*lblurmsk[1][0] + qGreen(*p)*lblurmsk[1][1] + qGreen(*(p+1))*lblurmsk[1][2] +
+                      qGreen(*(pp1-1))*lblurmsk[2][0] + qGreen(*pp1)*lblurmsk[2][1] + qGreen(*(pp1+1))*lblurmsk[2][2])/9;
+            if (green>255) green=255;
+            if (green<0) green=0;
+
+            int blue = (qBlue(*(pm1-1))*lblurmsk[0][0] + qBlue(*pm1)*lblurmsk[0][1] + qBlue(*(pm1+1))*lblurmsk[0][2] +
+                      qBlue(*(p-1))*lblurmsk[1][0] + qBlue(*p)*lblurmsk[1][1] + qBlue(*(p+1))*lblurmsk[1][2] +
+                      qBlue(*(pp1-1))*lblurmsk[2][0] + qBlue(*pp1)*lblurmsk[2][1] + qBlue(*(pp1+1))*lblurmsk[2][2])/9;
+            if (blue>255) blue=255;
+            if (blue<0) blue=0;
+            *q = qRgba(red,green,blue,255);
+            pm1++;
+            p++;
+            pp1++;
+            q++;
+        }
+    }
+    return res;
+}
+
+QImage ImageManip::highPass(){
+    QImage res = QImage(QImage::size(),QImage::format());
+    for (int i = 1; i < QImage::size().height()-1; i++) {
+        QRgb *q = (QRgb*) res.scanLine(i);
+        QRgb *pm1 = ( QRgb*)QImage::constScanLine(i-1);
+        QRgb *p = ( QRgb*)QImage::constScanLine(i);
+        QRgb *pp1 = ( QRgb*)QImage::constScanLine(i+1);
+        QRgb *end = p +  QImage::size().width()-1;
+        while (p < end) {
+
+            int red = (qRed(*(pm1-1))*hpassmsk[0][0] + qRed(*(pm1))*hpassmsk[0][1] + qRed(*(pm1+1))*hpassmsk[0][2] +
+                      qRed(*(p-1))*hpassmsk[1][0] + qRed(*(p))*hpassmsk[1][1] + qRed(*(p+1))*hpassmsk[1][2] +
+                      qRed(*(pp1)-1)*hpassmsk[2][0] + qRed(*(pp1))*hpassmsk[2][1] + qRed(*(pp1+1))*hpassmsk[2][2])/9;
+            if (red>255) red=255;
+            if (red<0) red=0;
+
+            int green = (qGreen(*(pm1-1))*hpassmsk[0][0] + qGreen(*(pm1))*hpassmsk[0][1] + qGreen(*(pm1+1))*hpassmsk[0][2] +
+                      qGreen(*(p-1))*hpassmsk[1][0] + qGreen(*p)*hpassmsk[1][1] + qGreen(*(p+1))*hpassmsk[1][2] +
+                      qGreen(*(pp1-1))*hpassmsk[2][0] + qGreen(*pp1)*hpassmsk[2][1] + qGreen(*(pp1+1))*hpassmsk[2][2])/9;
+            if (green>255) green=255;
+            if (green<0) green=0;
+
+            int blue = (qBlue(*(pm1-1))*hpassmsk[0][0] + qBlue(*pm1)*hpassmsk[0][1] + qBlue(*(pm1+1))*hpassmsk[0][2] +
+                      qBlue(*(p-1))*hpassmsk[1][0] + qBlue(*p)*hpassmsk[1][1] + qBlue(*(p+1))*hpassmsk[1][2] +
+                      qBlue(*(pp1-1))*hpassmsk[2][0] + qBlue(*pp1)*hpassmsk[2][1] + qBlue(*(pp1+1))*hpassmsk[2][2])/9;
+            if (blue>255) blue=255;
+            if (blue<0) blue=0;
+            *q = qRgba(red,green,blue,255);
+            pm1++;
+            p++;
+            pp1++;
+            q++;
+        }
+    }
+    return res;
+}
+
+QImage ImageManip::lowPass(){
     QImage res = QImage(QImage::size(),QImage::format());
     for (int i = 1; i < QImage::size().height()-1; i++) {
         QRgb *q = (QRgb*) res.scanLine(i);

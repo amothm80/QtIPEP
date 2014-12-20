@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BrightnessDialog</class>
- <widget class="QDialog" name="BrightnessDialog">
+ <class>GammaDialog</class>
+ <widget class="QDialog" name="GammaDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>126</height>
+    <width>460</width>
+    <height>143</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>80</y>
+     <x>90</x>
+     <y>100</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -29,49 +29,55 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="labelBrightness">
+  <widget class="QLabel" name="labelGamma">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>30</y>
-     <width>61</width>
-     <height>21</height>
+     <y>50</y>
+     <width>51</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Brightness</string>
+    <string>Gamma</string>
    </property>
   </widget>
-  <widget class="QSlider" name="horizontalSliderBrightness">
+  <widget class="QSlider" name="horizontalSlider">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>30</y>
-     <width>291</width>
+     <x>90</x>
+     <y>60</y>
+     <width>271</width>
      <height>19</height>
     </rect>
    </property>
    <property name="minimum">
-    <number>-50</number>
+    <number>1</number>
    </property>
    <property name="maximum">
-    <number>50</number>
+    <number>20</number>
+   </property>
+   <property name="pageStep">
+    <number>1</number>
+   </property>
+   <property name="value">
+    <number>10</number>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QLabel" name="brightnessValue">
+  <widget class="QLabel" name="labelGammaValue">
    <property name="geometry">
     <rect>
-     <x>420</x>
-     <y>30</y>
-     <width>47</width>
-     <height>21</height>
+     <x>390</x>
+     <y>50</y>
+     <width>61</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>0</string>
+    <string>1</string>
    </property>
   </widget>
  </widget>
@@ -80,7 +86,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>BrightnessDialog</receiver>
+   <receiver>GammaDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -89,14 +95,14 @@
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
-     <y>114</y>
+     <y>274</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>BrightnessDialog</receiver>
+   <receiver>GammaDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -105,23 +111,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
-     <y>114</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSliderBrightness</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>brightnessValue</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>255</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>443</x>
-     <y>40</y>
+     <y>274</y>
     </hint>
    </hints>
   </connection>

@@ -11,6 +11,7 @@
 #include "ui_mainwindow.h"
 #include "brightnessdialog.h"
 #include "rgbdialog.h"
+#include "gammadialog.h"
 
 
 namespace Ui {
@@ -44,6 +45,7 @@ private slots:
     void on_actionNegative_triggered();
     void on_actionIncreaseBrightness_triggered();
     void on_actionDecreaseBrightness_triggered();
+    void on_actionGammaCorrection_triggered();
     void on_actionBrightness_triggered();
     void on_actionHorizontalEdges_triggered();
     void on_actionVerticalEdges_triggered();
@@ -58,11 +60,15 @@ private slots:
     void on_actionVerticalFlip_triggered();
     void on_actionRotateClockwise_triggered();
     void on_actionRotateAnticlockwise_triggered();
+    void on_actionLightBlur_triggered();
+    void on_actionHighPass_triggered();
+    void on_actionLowPass_triggered();
     // on_XXX slots are only used for auto-connect and cannot be used
     // in normal connect fucntions
     //void on_actionRGB_accepted(int r,int g,int b);
     void actionRGB_accepted(int r,int g,int b);
     void actionBrightness_accepted(int v);
+    void actionGammaCorrection_accepted(double v);
 
 private:
     MdiChild *activeMdiChild();

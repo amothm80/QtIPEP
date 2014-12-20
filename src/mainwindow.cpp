@@ -143,6 +143,14 @@ void MainWindow::on_actionBrightness_triggered(){
     }
 }
 
+void MainWindow::on_actionGammaCorrection_triggered(){
+    if (activeMdiChild()){
+    GammaDialog d;
+    connect(&d,SIGNAL(gammaValue(double)),this,SLOT(actionGammaCorrection_accepted(double)));
+    d.exec();
+    }
+}
+
 void MainWindow::on_actionRGB_triggered(){
     if (activeMdiChild()){
     RGBDialog d;
@@ -154,6 +162,11 @@ void MainWindow::on_actionRGB_triggered(){
 void MainWindow::actionRGB_accepted(int r, int g, int b){
     if (activeMdiChild())
     activeMdiChild()->modifyRGB(r,g,b);
+}
+
+void MainWindow::actionGammaCorrection_accepted(double v){
+    if (activeMdiChild())
+    activeMdiChild()->gammaCorrection(v);
 }
 
 void MainWindow::on_actionHorizontalEdges_triggered(){
@@ -173,6 +186,21 @@ void MainWindow::on_actionSobel_triggered(){
 void MainWindow::on_actionHeavyBlur_triggered(){
     if (activeMdiChild())
     activeMdiChild()->heavyBlur();
+}
+
+void MainWindow::on_actionLightBlur_triggered(){
+    if (activeMdiChild())
+    activeMdiChild()->lightBlur();
+}
+
+void MainWindow::on_actionHighPass_triggered(){
+    if (activeMdiChild())
+    activeMdiChild()->highPass();
+}
+
+void MainWindow::on_actionLowPass_triggered(){
+    if (activeMdiChild())
+    activeMdiChild()->lowPass();
 }
 
 void MainWindow::on_actionLaplacian_triggered(){

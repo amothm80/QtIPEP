@@ -50,7 +50,7 @@ void MdiChild::undoAction(){
         images = images->prev;
     imageLabel->setPixmap(QPixmap::fromImage(images->image));
     imageLabel->resize(images->image.size());
-    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+   // parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
     parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
 }
 
@@ -59,7 +59,7 @@ void MdiChild::redoAction(){
         images = images->next;
     imageLabel->setPixmap(QPixmap::fromImage(images->image));
     imageLabel->resize(images->image.size());
-    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+    //parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
     parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
 }
 
@@ -70,13 +70,11 @@ MdiChild::~MdiChild()
     while(images->prev != NULL){
         images->image.~QImage();
         images = images->prev;
-        delete images->next;
         images->next = NULL;
     }
     if (images != NULL){
         images->image.~QImage();
-        delete images->next;
-        images->next = 0;
+        images->next = NULL;
     }
 }
 
@@ -103,12 +101,21 @@ bool MdiChild::loadFile(const QString &fileName){
         //imageLabel->resize(mdiAreaSize * 4/5);
     }
     imageLabel->resize(images->image.size());
-    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+    //parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
     parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
     setWindowFilePath(fileName);
     setWindowTitle(fileName);
     setWindowIcon(QIcon(":/icons/image.ico"));
     return true;
+}
+
+void MdiChild::resizeEvent( QResizeEvent *e )
+{
+     if (!images->image.isNull()){
+        images->image = images->image.scaled(e->size(), Qt::KeepAspectRatio);
+        imageLabel->resize(images->image.size());
+        parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+     }
 }
 
 bool MdiChild::saveFile(const QString &fileName){
@@ -174,6 +181,26 @@ void MdiChild::heavyBlur(){
     imageLabel->setPixmap(QPixmap::fromImage(images->image));
 }
 
+void MdiChild::lightBlur(){
+    addImage(images->image.lightBlur());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+}
+
+void MdiChild::highPass(){
+    addImage(images->image.highPass());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+}
+
+void MdiChild::lowPass(){
+    addImage(images->image.lowPass());
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+}
+
+void MdiChild::gammaCorrection(double v){
+    addImage(images->image.gammaCorrection(v));
+    imageLabel->setPixmap(QPixmap::fromImage(images->image));
+}
+
 void MdiChild::laplacian(){
     addImage(images->image.laplacianTransformation());
     imageLabel->setPixmap(QPixmap::fromImage(images->image));
@@ -207,7 +234,7 @@ void MdiChild::rotateClockwise(){
     addImage(images->image.rotateClockwise());
     imageLabel->setPixmap(QPixmap::fromImage(images->image));
     imageLabel->resize(images->image.size());
-    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+   // parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
     parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
 }
 
@@ -215,7 +242,7 @@ void MdiChild::rotateAntiClockwise(){
     addImage(images->image.rotateAntiClockwise());
     imageLabel->setPixmap(QPixmap::fromImage(images->image));
     imageLabel->resize(images->image.size());
-    parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
+    //parentWidget()->setMaximumSize(imageLabel->size().width()+18,imageLabel->size().height()+40);
     parentWidget()->resize(imageLabel->size().width()+18,imageLabel->size().height()+40);
 }
 

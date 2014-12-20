@@ -23,3 +23,5 @@ build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/object_script.QtIPEP.Debug
 build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/object_script.QtIPEP.Release
 build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/ui_brightnessdialog.h
 build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/ui_rgbdialog.h
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/debug/moc_gammadialog.cpp
+build-QtIPEP-Desktop_Qt_5_4_0_MinGW_32bit-Debug/ui_gammadialog.h

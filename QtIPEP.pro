@@ -18,7 +18,8 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/mdichild.cpp \
-    src/rgbdialog.cpp
+    src/rgbdialog.cpp \
+    src/gammadialog.cpp
 
 
 
@@ -27,12 +28,14 @@ HEADERS  += \
     include/imagemanip.h \
     include/mainwindow.h \
     include/mdichild.h \
-    include/rgbdialog.h
+    include/rgbdialog.h \
+    include/gammadialog.h
 
 FORMS    +=   \
         forms/mainwindow.ui \
         forms/rgbdialog.ui \
-        forms/brightnessdialog.ui
+        forms/brightnessdialog.ui \
+    forms/gammadialog.ui
 
 QMAKE_CXXFLAGS += -std=c++11 -static-libstdc++
 

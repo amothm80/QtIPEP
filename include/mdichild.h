@@ -44,6 +44,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QScrollArea>
+#include <QResizeEvent>
 #include "imagemanip.h"
 
 //#ifndef NULL
@@ -73,10 +74,14 @@ public:
     void RGBSwap();
     void increaseBrightness(int v);
     void decreaseBrightness(int v);
+    void gammaCorrection(double v);
     void horizontalEdges();
     void verticalEdges();
     void sobel();
     void heavyBlur();
+    void lightBlur();
+    void highPass();
+    void lowPass();
     void laplacian();
     void zoomIn();
     void negative();
@@ -87,7 +92,6 @@ public:
     void verticalFlip();
     void rotateClockwise();
     void rotateAntiClockwise();
-//private slots:
 
 
 private:
@@ -95,6 +99,7 @@ private:
     void addImage(ImageManip img);
     void addImage(QImage img);
     void createImagesList(ImageManip img);
+    void resizeEvent( QResizeEvent *e );
 
 
     double currentScaleFactor = 1.0;
