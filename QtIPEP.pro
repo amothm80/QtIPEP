@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = QtIPEP
 TEMPLATE = app
 
-
 SOURCES += \
     src/brightnessdialog.cpp \
     src/imagemanip.cpp \
